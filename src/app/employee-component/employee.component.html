@@ -1,0 +1,59 @@
+<form [formGroup]="employeeForm">
+  <div class="container">
+    <h2 class="heading" style="padding-left: 30px">Employee Database</h2>
+    <div class="table-container">
+      <table class="table-container">
+        <tr class="table-row">
+          <th class="table-head">Employee</th>
+          <th class="table-head">Product</th>
+          <th class="table-head">Options</th>
+        </tr>
+        <tr class="table-row" *ngFor="let e of employees; let i = index">
+          <td class="table-data" *ngIf="!e.editable; else elseBlock1">
+            {{ e.name }}
+          </td>
+          <td class="table-data" *ngIf="!e.editable; else elseBlock">
+            {{ e.product }}
+          </td>
+          <ng-template #elseBlock1>
+            <td class="table-data table-input" >
+              <input type="text" id="employee" formControlName="name" required/>
+            </td>
+          </ng-template>
+          <ng-template #elseBlock>
+            <td class="table-data table-input" >
+              <input type="text" id="product" formControlName="product" required/>
+            </td>
+          </ng-template>
+          <td class="table-data" *ngIf="!e.editable; else elseBlock2">
+            <button  class="btn btn-primary" (click)="onEdit(i)">
+              Edit
+            </button>
+            <button class="btn btn-danger" (click)="onDelete(i)">
+              Delete
+            </button>
+          </td>
+          <ng-template #elseBlock2>
+            <td class="table-data">
+              <button
+                type="submit"
+                class="btn btn-secondary"
+                [disabled]="!employeeForm.valid"
+                (click)="onSave(i,employeeForm)"
+              >
+                Save
+              </button>
+            </td>
+          </ng-template>
+        </tr>
+      </table>
+      <button
+        type="submit"
+        class="btn btn-secondary"
+        (click)="addNewEmployee()"
+      >
+        Add
+      </button>
+    </div>
+  </div>
+</form>
