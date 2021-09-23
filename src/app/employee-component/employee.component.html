@@ -1,4 +1,4 @@
-<form [formGroup]="employeeForm">
+<form [formGroup]="employeeForm" (ngSubmit)="onClickSubmit(employeeForm)">
   <div class="container">
     <h2 class="heading" style="padding-left: 30px">Employee Database</h2>
     <div class="table-container">
@@ -8,44 +8,71 @@
           <th class="table-head">Product</th>
           <th class="table-head">Options</th>
         </tr>
-        <tr class="table-row" *ngFor="let e of employees; let i = index">
-          <td class="table-data" *ngIf="!e.editable; else elseBlock1">
-            {{ e.name }}
-          </td>
-          <td class="table-data" *ngIf="!e.editable; else elseBlock">
-            {{ e.product }}
-          </td>
-          <ng-template #elseBlock1>
-            <td class="table-data table-input" >
-              <input type="text" id="employee" formControlName="name" required/>
+        <ng-container formArrayName="employeearray">
+          <tr
+            class="table-row"
+            *ngFor="let e of employee.controls; let i = index"
+            [formGroupName]="i"
+          >
+            <td
+              class="table-data"
+              *ngIf="!e.value['editable']; else elseBlock1"
+            >
+              {{ e.value["name"] }}
             </td>
-          </ng-template>
-          <ng-template #elseBlock>
-            <td class="table-data table-input" >
-              <input type="text" id="product" formControlName="product" required/>
+            <td class="table-data" *ngIf="!e.value['editable']; else elseBlock">
+              {{ e.value["product"] }}
             </td>
-          </ng-template>
-          <td class="table-data" *ngIf="!e.editable; else elseBlock2">
-            <button  class="btn btn-primary" (click)="onEdit(i)">
-              Edit
-            </button>
-            <button class="btn btn-danger" (click)="onDelete(i)">
-              Delete
-            </button>
-          </td>
-          <ng-template #elseBlock2>
-            <td class="table-data">
-              <button
-                type="submit"
-                class="btn btn-secondary"
-                [disabled]="!employeeForm.valid"
-                (click)="onSave(i,employeeForm)"
-              >
-                Save
+            <ng-template #elseBlock1>
+              <td class="table-data table-input">
+                <input
+                  type="text"
+                  id="employee"
+                  formControlName="name"
+                  required
+                />
+              </td>
+            </ng-template>
+            <ng-template #elseBlock>
+              <td class="table-data table-input">
+                <input
+                  type="number"
+                  id="product"
+                  formControlName="product"
+                  required
+                />
+              </td>
+            </ng-template>
+            <td
+              class="table-data"
+              *ngIf="!e.value['editable']; else elseBlock2"
+            >
+              <button class="btn btn-primary" (click)="onEdit(e)">Edit</button>
+              <button class="btn btn-danger" (click)="onDelete(i)">
+                Delete
               </button>
             </td>
-          </ng-template>
-        </tr>
+            <ng-template #elseBlock2>
+              <td class="table-data">
+                <button
+                  type="submit"
+                  class="btn btn-secondary"
+                  [disabled]="!employee.valid"
+                  (click)="onSave(i, e)"
+                >
+                  Save
+                </button>
+                <button
+                type="submit"
+                class="btn btn-danger"
+                (click)="onCancel(i, e)"
+              >
+                Cancel
+              </button>
+              </td>
+            </ng-template>
+          </tr>
+        </ng-container>
       </table>
       <button
         type="submit"
@@ -54,6 +81,7 @@
       >
         Add
       </button>
+      <button type="submit" class="btn btn-secondary">Submit</button>
     </div>
   </div>
 </form>

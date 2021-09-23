@@ -51,11 +51,11 @@ table tr:nth-child(even) {
     box-shadow: 2px 2px;
     cursor:pointer;
 }
-.btn-primary{
+.btn-danger{
     background-color: rgb(207, 186, 176);
     
 }
-.btn-danger{
+.btn-primary{
   background-color:rgb(216, 155, 216);
 }
 .btn-secondary{
